@@ -11,7 +11,7 @@ namespace To_Do_List.Controllers
     [Route("[api/controller]")]
     public class ToDoListController : ControllerBase
     {
-        List<ToDoList> _toDoLists = new List<ToDoList>()
+        public List<ToDoList> _toDoLists = new List<ToDoList>()
         {
             new ToDoList() {Id = 0, Date = DateTime.Today, Name = "Estudar", Execution = true},
             new ToDoList() {Id = 1, Date = DateTime.Today, Name = "Andar de bicicleta", Execution = true},
@@ -20,17 +20,11 @@ namespace To_Do_List.Controllers
             new ToDoList() {Id = 4, Date = DateTime.Today, Name = "Reunião", Execution = true}
         };
 
-        [HttpGet]
-        public IActionResult Gets()
+        public List<ToDoList> Get()
         {
-            Return _toDoLists;
+            return _toDoLists;
         }
 
-        [HttpPost]
-        public IActionResult Posts(int id, DateTime date, string name, bool execution)
-        {
-            if (!int.IsNullOrEmpty(id)
-               _toDoLists.Add(new ToDoList(id));
-        }
     }
 }
+
