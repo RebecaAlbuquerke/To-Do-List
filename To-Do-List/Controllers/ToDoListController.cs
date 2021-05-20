@@ -23,7 +23,14 @@ namespace To_Do_List.Controllers
         [HttpGet]
         public IActionResult Gets()
         {
+            Return _toDoLists;
+        }
 
+        [HttpPost]
+        public IActionResult Posts(int id, DateTime date, string name, bool execution)
+        {
+            if (!int.IsNullOrEmpty(id)
+               _toDoLists.Add(new ToDoList(id));
         }
     }
 }
