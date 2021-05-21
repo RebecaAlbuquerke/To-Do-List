@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using To_Do_List.Data;
@@ -39,6 +40,20 @@ namespace To_Do_List.Controllers
             }
 
             return toDoList;
+        }
+
+        [HttpGet("get all")]
+        public async IAsyncEnumerable<ToDoList> GetAllToDoLists()
+        {
+            var toDoLists = _context.ToDoLists;
+
+            await foreach (var toDoList in toDoLists)
+            {
+                if (toDoList == null)
+                {
+                    yield return toDoList;
+                }
+            }
         }
     }
 }
