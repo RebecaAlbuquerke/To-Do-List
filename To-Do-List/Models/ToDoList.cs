@@ -1,6 +1,9 @@
-using System;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace To_Do_List
+namespace To_Do_List.Models
 {
     public class ToDoList
     {
@@ -11,5 +14,7 @@ namespace To_Do_List
         public string Name { get; set; }
 
         public bool Execution { get; set; }
+
     }
 }
+
