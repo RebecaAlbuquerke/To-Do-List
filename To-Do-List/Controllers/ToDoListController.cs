@@ -23,11 +23,18 @@ namespace To_Do_List.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<ToDoList>> PostToDoList(ToDoList toDoList)
+        public async Task<ActionResult<ToDoViewModel>> PostToDoList(ToDoViewModel toDoViewModel)
         {
+            var toDoList = new ToDoList
+            {
+                Date = toDoViewModel.Date,
+                Name = toDoViewModel.Name,
+                Execution = toDoViewModel.Execution    
+            };
+
             _context.ToDoLists.Add(toDoList);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetToDoList), new { id = toDoList.Id }, toDoList);
+            return CreatedAtAction(nameof(GetToDoList), new { id = toDoList.Id }, ViewModelToDo(toDoList));
         }
 
         [HttpGet("{id}")]
