@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using To_Do_List.Data;
 using To_Do_List.Models;
+using To_Do_List.ViewModels;
 
 namespace To_Do_List.Controllers
 {
@@ -42,18 +43,11 @@ namespace To_Do_List.Controllers
             return toDoList;
         }
 
-        [HttpGet("get all")]
-        public async IAsyncEnumerable<ToDoList> GetAllToDoLists()
+        [HttpGet]
+        public ActionResult<IEnumerable<ToDoViewModel>> GetToDoList()
         {
-            var toDoLists = _context.ToDoLists;
-
-            await foreach (var toDoList in toDoLists)
-            {
-                if (toDoList == null)
-                {
-                    yield return toDoList;
-                }
-            }
+            return _context.ToDoLists.Select(x => new ToDoViewModel()
+            { Date = x.Date, Execution = x.Execution, Name = x.Name }).ToList();
         }
     }
 }
