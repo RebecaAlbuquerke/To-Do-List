@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 using To_Do_List.Data;
@@ -29,7 +30,7 @@ namespace To_Do_List.Controllers
             {
                 Date = toDoViewModel.Date,
                 Name = toDoViewModel.Name,
-                Execution = toDoViewModel.Execution    
+                Execution = toDoViewModel.Execution
             };
 
             _context.ToDoLists.Add(toDoList);
@@ -55,6 +56,7 @@ namespace To_Do_List.Controllers
         {
             return _context.ToDoLists.Select(x => new ToDoViewModel()
             {
+                Id = x.Id,
                 Date = x.Date,
                 Execution = x.Execution,
                 Name = x.Name
@@ -71,6 +73,24 @@ namespace To_Do_List.Controllers
             }
 
             _context.ToDoLists.Remove(toDoList);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateToDoList(int id, ToDoViewModel toDoViewModel)
+        {
+            var toDoList = await _context.ToDoLists.FindAsync(id);
+            if (toDoList == null)
+            {
+                return NotFound();
+            }
+
+            toDoList.Date = toDoViewModel.Date;
+            toDoList.Name = toDoViewModel.Name;
+            toDoList.Execution = toDoViewModel.Execution;
+
             await _context.SaveChangesAsync();
 
             return NoContent();
