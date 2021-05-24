@@ -7,6 +7,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 using To_Do_List.Data;
+using To_Do_List.Exceptions;
 using To_Do_List.Models;
 using To_Do_List.ViewModels;
 
@@ -52,10 +53,8 @@ namespace To_Do_List.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ToDoViewModel>> GetToDoList(int? page)
+        public ActionResult<IEnumerable<ToDoViewModel>> GetToDoList(int? page, int pageSize)
         {
-            const int pageSize = 10;
-
             var items = _context.ToDoItems.Select(x => new ToDoViewModel()
             {
                 Id = x.Id,
@@ -64,9 +63,13 @@ namespace To_Do_List.Controllers
                 Name = x.Name
             });
 
-            var paginatedItems = items.Skip((page ?? 0) * pageSize).Take(pageSize).ToList();
+            if (pageSize >= 15 && pageSize <= 100)
+            {
+                var paginatedItems = items.Skip((page ?? 0) * pageSize).Take(pageSize).ToList();
+                return paginatedItems;
+            }
 
-            return paginatedItems;
+            return BadRequest("O tamanho deve está entre 15 e 100");
         }
 
         [HttpDelete("{id}")]
