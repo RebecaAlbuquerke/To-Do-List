@@ -16,9 +16,9 @@ namespace To_Do_List.Controllers
     [Route("api/[controller]")]
     public class ToDoListController : ControllerBase
     {
-        private readonly ToDoListContext _context;
+        private readonly ToDoItemContext _context;
 
-        public ToDoListController(ToDoListContext context)
+        public ToDoListController(ToDoItemContext context)
         {
             _context = context;
         }
@@ -26,35 +26,35 @@ namespace To_Do_List.Controllers
         [HttpPost]
         public async Task<ActionResult<ToDoViewModel>> PostToDoList(ToDoViewModel toDoViewModel)
         {
-            var toDoList = new ToDoList
+            var toDoItem = new ToDoItem
             {
                 Date = toDoViewModel.Date,
                 Name = toDoViewModel.Name,
                 Execution = toDoViewModel.Execution
             };
 
-            _context.ToDoLists.Add(toDoList);
+            _context.ToDoItems.Add(toDoItem);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetToDoList), new { id = toDoList.Id }, ViewModelToDo(toDoList));
+            return CreatedAtAction(nameof(GetToDoList), new { id = toDoItem.Id }, ViewModelToDo(toDoItem));
         }
 
         [HttpGet("{id}")]
         public ActionResult<ToDoViewModel> GetToDoList(int id)
         {
-            var toDoList = _context.ToDoLists.Find(id);
+            var toDoItem = _context.ToDoItems.Find(id);
 
-            if (toDoList == null)
+            if (toDoItem == null)
             {
                 return NotFound();
             }
 
-            return ViewModelToDo(toDoList);
+            return ViewModelToDo(toDoItem);
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<ToDoViewModel>> GetToDoList()
         {
-            return _context.ToDoLists.Select(x => new ToDoViewModel()
+            return _context.ToDoItems.Select(x => new ToDoViewModel()
             {
                 Id = x.Id,
                 Date = x.Date,
@@ -66,13 +66,13 @@ namespace To_Do_List.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteToDolist(int id)
         {
-            var toDoList = await _context.ToDoLists.FindAsync(id);
-            if (toDoList == null)
+            var toDoItem = await _context.ToDoItems.FindAsync(id);
+            if (toDoItem == null)
             {
                 return NotFound();
             }
 
-            _context.ToDoLists.Remove(toDoList);
+            _context.ToDoItems.Remove(toDoItem);
             await _context.SaveChangesAsync();
 
             return NoContent();
@@ -81,28 +81,28 @@ namespace To_Do_List.Controllers
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateToDoList(int id, ToDoViewModel toDoViewModel)
         {
-            var toDoList = await _context.ToDoLists.FindAsync(id);
-            if (toDoList == null)
+            var toDoItem = await _context.ToDoItems.FindAsync(id);
+            if (toDoItem == null)
             {
                 return NotFound();
             }
 
-            toDoList.Date = toDoViewModel.Date;
-            toDoList.Name = toDoViewModel.Name;
-            toDoList.Execution = toDoViewModel.Execution;
+            toDoItem.Date = toDoViewModel.Date;
+            toDoItem.Name = toDoViewModel.Name;
+            toDoItem.Execution = toDoViewModel.Execution;
 
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private static ToDoViewModel ViewModelToDo(ToDoList toDoList) =>
+        private static ToDoViewModel ViewModelToDo(ToDoItem toDoItem) =>
             new ToDoViewModel
             {
-                Id = toDoList.Id,
-                Date = toDoList.Date,
-                Name = toDoList.Name,
-                Execution = toDoList.Execution
+                Id = toDoItem.Id,
+                Date = toDoItem.Date,
+                Name = toDoItem.Name,
+                Execution = toDoItem.Execution
             };
     }
 }

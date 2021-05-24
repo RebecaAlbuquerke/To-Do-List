@@ -7,13 +7,13 @@ using To_Do_List.Models;
 
 namespace To_Do_List.Data
 {
-    public class ToDoListContext : DbContext
+    public class ToDoItemContext : DbContext
     {
-        public ToDoListContext(DbContextOptions<ToDoListContext> options)
+        public ToDoItemContext(DbContextOptions<ToDoItemContext> options)
             : base(options)
         {
         }
 
-        public DbSet<ToDoList> ToDoLists { get; set; }
+        public DbSet<ToDoItem> ToDoItems { get; set; }
     }
 }
