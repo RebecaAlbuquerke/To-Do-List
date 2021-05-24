@@ -7,7 +7,7 @@ using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading.Tasks;
 using To_Do_List.Data;
-using To_Do_List.Exceptions;
+using To_Do_List.InputModel;
 using To_Do_List.Models;
 using To_Do_List.ViewModels;
 
@@ -88,7 +88,7 @@ namespace To_Do_List.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateToDoList(int id, ToDoViewModel toDoViewModel)
+        public async Task<IActionResult> UpdateToDoList(int id, ToDoInputModel toDoInputModel)
         {
             var toDoItem = await _context.ToDoItems.FindAsync(id);
             if (toDoItem == null)
@@ -96,9 +96,9 @@ namespace To_Do_List.Controllers
                 return NotFound();
             }
 
-            toDoItem.Date = toDoViewModel.Date;
-            toDoItem.Name = toDoViewModel.Name;
-            toDoItem.Execution = toDoViewModel.Execution;
+            toDoItem.Date = toDoInputModel.Date;
+            toDoItem.Name = toDoInputModel.Name;
+            toDoItem.Execution = toDoInputModel.Execution;
 
             await _context.SaveChangesAsync();
 
