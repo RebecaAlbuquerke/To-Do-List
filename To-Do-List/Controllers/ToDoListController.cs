@@ -31,24 +31,52 @@ namespace To_Do_List.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<ToDoList>> GetToDoList(int id)
+        public ActionResult<ToDoViewModel> GetToDoList(int id)
         {
-            var toDoList = await _context.ToDoLists.FindAsync(id);
+            var toDoList = _context.ToDoLists.Find(id);
 
             if (toDoList == null)
             {
                 return NotFound();
             }
 
-            return toDoList;
+            return ViewModelToDo(toDoList);
         }
 
         [HttpGet]
         public ActionResult<IEnumerable<ToDoViewModel>> GetToDoList()
         {
             return _context.ToDoLists.Select(x => new ToDoViewModel()
-            { Date = x.Date, Execution = x.Execution, Name = x.Name }).ToList();
+            {
+                Date = x.Date,
+                Execution = x.Execution,
+                Name = x.Name
+            }).ToList();
         }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteToDolist(int id)
+        {
+            var toDoList = await _context.ToDoLists.FindAsync(id);
+            if (toDoList == null)
+            {
+                return NotFound();
+            }
+
+            _context.ToDoLists.Remove(toDoList);
+            await _context.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        private static ToDoViewModel ViewModelToDo(ToDoList toDoList) =>
+            new ToDoViewModel
+            {
+                Id = toDoList.Id,
+                Date = toDoList.Date,
+                Name = toDoList.Name,
+                Execution = toDoList.Execution
+            };
     }
 }
 

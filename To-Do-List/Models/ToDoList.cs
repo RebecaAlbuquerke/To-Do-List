@@ -14,7 +14,6 @@ namespace To_Do_List.Models
         public string Name { get; set; }
 
         public bool Execution { get; set; }
-
     }
 }
 

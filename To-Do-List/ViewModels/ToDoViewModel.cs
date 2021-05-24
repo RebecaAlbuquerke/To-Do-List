@@ -7,6 +7,8 @@ namespace To_Do_List.ViewModels
 {
     public class ToDoViewModel
     {
+        public int Id { get; set; }
+
         public DateTime Date{ get; set; }
 
         public string Name { get; set; }
