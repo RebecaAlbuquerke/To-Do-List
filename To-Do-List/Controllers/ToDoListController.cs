@@ -52,15 +52,21 @@ namespace To_Do_List.Controllers
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<ToDoViewModel>> GetToDoList()
+        public ActionResult<IEnumerable<ToDoViewModel>> GetToDoList(int? page)
         {
-            return _context.ToDoItems.Select(x => new ToDoViewModel()
+            const int pageSize = 10;
+
+            var items = _context.ToDoItems.Select(x => new ToDoViewModel()
             {
                 Id = x.Id,
                 Date = x.Date,
                 Execution = x.Execution,
                 Name = x.Name
-            }).ToList();
+            });
+
+            var paginatedItems = items.Skip((page ?? 0) * pageSize).Take(pageSize).ToList();
+
+            return paginatedItems;
         }
 
         [HttpDelete("{id}")]
